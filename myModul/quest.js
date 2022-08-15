@@ -1,4 +1,5 @@
 const chalk = require('chalk');
+const validator = require('validator');
 const fs = require('fs');
 
 var env = require('dotenv').config();
@@ -40,11 +41,31 @@ exports.saveData = (nama,email,hp) => {
         const fileBuffer = fs.readFileSync(pathJson, 'utf-8');
         const contacts = JSON.parse(fileBuffer);
 
+        // cek duplikat nama
         const duplicates = contacts.find(contact => contact.nama === nama);
         if(duplicates){
             console.log(chalk.bold.italic.bgRedBright(`Nama ${nama} sudah terdaftar silahkan gunakan nama lain!!`));
             return false;
+        };
+        
+        // cek email dan noTelepon
+        if(validator.isInt(hp)){
+            if(!validator.isMobilePhone(hp, 'id-ID')){
+                console.log(chalk.bold.italic.bgRedBright(`input yang dimasukan bukan nomor handphone indonesia`));
+                return false;
+            }
+        }else{
+            console.log(chalk.bold.italic.bgRedBright(`input yang dimasukan bukan nomor telepon`));
+            return false;     
         }
+        
+        if(email){
+            if(!validator.isEmail(email)){
+                console.log(chalk.bold.italic.bgRedBright(`input yang dimasukan bukan email!!`));
+                return false;
+            }
+        }
+        
 
         // menambah data yang pada variable json
         contacts.push(json);
@@ -52,7 +73,7 @@ exports.saveData = (nama,email,hp) => {
         // menuliskan ke data.json
         fs.writeFile(pathJson, JSON.stringify(contacts, null, 2), (err) => {
             if(err) throw err;
-            console.log('\n===> data telah tersipman <===');
+            console.log(chalk.bold.italic.inverse.green('\n===> data telah tersipman <==='));
             console.table(json);
         });
         
