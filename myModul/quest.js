@@ -1,3 +1,4 @@
+const chalk = require('chalk');
 const fs = require('fs');
 
 var env = require('dotenv').config();
@@ -41,7 +42,7 @@ exports.saveData = (nama,email,hp) => {
 
         const duplicates = contacts.find(contact => contact.nama === nama);
         if(duplicates){
-            console.log(`Nama ${nama} sudah terdaftar silahkan gunakan nama lain!!`);
+            console.log(chalk.bold.italic.bgRedBright(`Nama ${nama} sudah terdaftar silahkan gunakan nama lain!!`));
             return false;
         }
 
