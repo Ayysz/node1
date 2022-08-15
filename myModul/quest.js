@@ -3,11 +3,11 @@ const fs = require('fs');
 var env = require('dotenv').config();
     env = process.env;
 
-const readline = require('readline');
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout,
-    });
+// const readline = require('readline');
+//     const rl = readline.createInterface({
+//         input: process.stdin,
+//         output: process.stdout,
+//     });
     
 
 // mengambil variable dari .env
@@ -39,6 +39,12 @@ exports.saveData = (nama,email,hp) => {
         const fileBuffer = fs.readFileSync(pathJson, 'utf-8');
         const contacts = JSON.parse(fileBuffer);
 
+        const duplicates = contacts.find(contact => contact.nama === nama);
+        if(duplicates){
+            console.log(`Nama ${nama} sudah terdaftar silahkan gunakan nama lain!!`);
+            return false;
+        }
+
         // menambah data yang pada variable json
         contacts.push(json);
 
@@ -50,5 +56,5 @@ exports.saveData = (nama,email,hp) => {
         });
         
         // readline ditutup / berakhir
-        rl.close();
+        // rl.close();
 }
