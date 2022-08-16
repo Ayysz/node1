@@ -1,6 +1,6 @@
 const { command, describe } = require("yargs");
 const yargs = require("yargs");
-const { saveData, showData } = require("./myModul/kontak"); 
+const { saveData, showData, detailData, deleteData } = require("./myModul/kontak"); 
 //menggunkana { } untun memanggil hanya satu modul secara spesifik
 // contoh diatas memanggil hanya fungsi saveData pada module quest.js
 
@@ -38,6 +38,38 @@ yargs.command({
         showData();
     }, 
 });
+
+// command untuk menampilkan detail data kontak
+yargs.command({
+    command: 'detail',
+    describe:'menampilkan detail data kontak berdasarkan nama',
+    builder: {
+        nama: {
+            describe: 'nama kontak',
+            demandOption: true,
+            type: 'string',
+        }
+    },
+    handler(argv) {
+        detailData(argv.nama);
+    }, 
+});
+
+// command untuk menghapus data kontak
+yargs.command({
+    command: 'delete',
+    describe: 'menghapus data kontak berdasarkan nama',
+    builder: {
+        nama: {
+            describe: 'nama kontak',
+            demandOption: true,
+            type: 'string',
+        },
+    },
+    handler(argv){
+        deleteData(argv.nama);
+    }
+})
 
 
 yargs.parse();
