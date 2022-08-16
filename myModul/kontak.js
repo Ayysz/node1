@@ -33,13 +33,17 @@ exports.question = (question) => {
     });
 };
 
+const loadContact = () => {
+    // membaca file json (./data/data.json)
+    const fileBuffer = fs.readFileSync(pathJson, 'utf-8');
+    return contacts = JSON.parse(fileBuffer);
+};
+
 // Menyimpan Data
 exports.saveData = (nama,email,hp) => {
     let json = {nama, hp, email};
 
-        // membaca file json (./data/data.json)
-        const fileBuffer = fs.readFileSync(pathJson, 'utf-8');
-        const contacts = JSON.parse(fileBuffer);
+        loadContact();
 
         // cek duplikat nama
         const duplicates = contacts.find(contact => contact.nama === nama);
@@ -79,4 +83,13 @@ exports.saveData = (nama,email,hp) => {
         
         // readline ditutup / berakhir
         // rl.close();
+}
+
+exports.showData = () => {
+    console.log(chalk.inverse.italic.bold.blueBright('Daftar kontak'));
+    // console.table(loadContact());
+    let dataContact = loadContact();
+    dataContact.forEach((contact, i) => {
+        console.log(`${i+1}. ${contact.nama} - ${contact.hp}`);
+    })
 }
